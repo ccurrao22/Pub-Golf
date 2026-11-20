@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10231d">
+<title>Byron Bay Pub Golf</title>
+<style>
+:root {
+  color-scheme: light;
+  --site-primary: #174b3a;
+  --site-on-primary: #ffffff;
+  --site-secondary: #d9a441;
+  --site-on-secondary: #17251f;
+  --site-background: #f2f0e8;
+  --site-on-background: #18231e;
+  --site-font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Georgia, "Times New Roman", serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --surface: #ffffff;
+  --surface-2: #e8eee8;
+  --text-muted: #4b5b51;
+  --border: #cbd5cc;
+  --good: #2e7958;
+  --shadow: 0 12px 32px rgba(17,39,29,.10);
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; background-color: var(--site-background); color: var(--site-on-background); padding: 22px 16px 40px; }
+.wrap { max-width: 900px; margin: 0 auto; }
+.hero { background: var(--site-primary); color: var(--site-on-primary); border-radius: calc(24px * var(--site-radius-scale)); padding: 25px 22px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+.hero:after { content:""; position:absolute; width:210px; height:210px; border:1px solid rgba(255,255,255,.16); border-radius:50%; right:-65px; top:-95px; box-shadow:0 0 0 24px rgba(255,255,255,.035),0 0 0 48px rgba(255,255,255,.025); opacity:var(--site-decoration-opacity); pointer-events:none; }
+.eyebrow { text-transform:uppercase; letter-spacing:.19em; font-size:.68rem; font-weight:800; opacity:.78; }
+h1,h2,h3,p { margin-top:0; }
+h1 { font: 700 calc(2.15rem * var(--site-heading-scale))/1.02 var(--site-font-heading); margin:10px 0 8px; letter-spacing:-.035em; }
+.hero p { margin:0; opacity:.8; font-size:.9rem; }
+.hero-row { display:flex; align-items:end; justify-content:space-between; gap:16px; }
+.pill { border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.1); border-radius:99px; padding:8px 11px; font-size:.72rem; white-space:nowrap; }
+.toolbar { display:flex; gap:9px; flex-wrap:wrap; margin:16px 0; }
+button,.file-label { font:inherit; cursor:pointer; border:1px solid var(--border); border-radius:12px; padding:10px 14px; background:var(--surface); color:var(--site-on-background); font-weight:700; font-size:.84rem; }
+button.primary,.file-label { background:var(--site-secondary); border-color:var(--site-secondary); color:var(--site-on-secondary); }
+button.active { background:var(--site-primary); border-color:var(--site-primary); color:var(--site-on-primary); }
+button:focus-visible,.file-label:focus-within,select:focus-visible { outline:3px solid var(--site-secondary); outline-offset:2px; }
+input[type=file] { position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
+.status { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; color:var(--text-muted); font-size:.78rem; margin:0 2px 16px; }
+.dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--good); margin-right:6px; }
+.tabs { display:flex; gap:7px; margin:18px 0 13px; }
+.tabs button { flex:1; }
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:calc(20px * var(--site-radius-scale)); box-shadow:var(--shadow); overflow:hidden; }
+.panel-head { padding:18px 18px 13px; display:flex; justify-content:space-between; align-items:end; gap:12px; }
+.panel-head h2 { font:700 calc(1.45rem * var(--site-heading-scale)) var(--site-font-heading); margin:0; }
+.panel-head small { color:var(--text-muted); }
+.filters { padding:0 18px 14px; display:flex; gap:8px; flex-wrap:wrap; }
+.filters button { padding:7px 11px; font-size:.76rem; }
+.list { padding:0 12px 12px; }
+.entry { display:grid; grid-template-columns:36px minmax(0,1fr) auto; gap:11px; align-items:center; padding:13px 8px; border-top:1px solid var(--border); }
+.rank { width:32px; height:32px; display:grid; place-items:center; border-radius:10px; background:var(--surface-2); font-weight:850; font-size:.85rem; }
+.rank.top { background:var(--site-secondary); color:var(--site-on-secondary); }
+.name-line { display:flex; align-items:center; gap:7px; font-weight:800; }
+.team-dot { width:9px; height:9px; border-radius:50%; display:inline-block; flex:none; }
+.meta { color:var(--text-muted); font-size:.73rem; margin-top:4px; line-height:1.4; }
+.score { font-size:1.75rem; font-weight:900; letter-spacing:-.06em; text-align:right; line-height:1; }
+.score-label { display:block; font-size:.58rem; letter-spacing:.12em; color:var(--text-muted); text-align:right; margin-top:5px; font-weight:800; }
+.team-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:0 14px 15px; }
+.team-card { border:1px solid var(--border); border-radius:15px; padding:14px; background:var(--surface); }
+.team-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.team-title { font-weight:850; }
+.team-score { font-size:1.65rem; font-weight:900; }
+.team-sub { color:var(--text-muted); font-size:.73rem; margin-top:7px; }
+.team-members { border-top:1px solid var(--border); margin-top:10px; padding-top:9px; font-size:.75rem; line-height:1.7; color:var(--text-muted); }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin:14px 0; }
+.stat { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:13px; }
+.stat strong { display:block; font-size:1.35rem; }
+.stat span { color:var(--text-muted); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; }
+.empty { padding:30px 20px; text-align:center; color:var(--text-muted); }
+.empty strong { color:var(--site-on-background); display:block; margin-bottom:7px; }
+.footer { text-align:center; color:var(--text-muted); font-size:.7rem; margin:17px 0 0; }
+select { background:var(--surface); color:var(--site-on-background); border:1px solid var(--border); border-radius:10px; padding:8px 10px; font:inherit; }
+.page-tabs { display:flex; gap:8px; margin:17px 0 12px; }
+.page-tabs button { flex:1; }
+.page[hidden] { display:none; }
+.scorecard-wrap { overflow-x:auto; padding:0 12px 14px; }
+.scorecard { width:100%; min-width:650px; border-collapse:separate; border-spacing:0; font-size:.78rem; text-align:center; }
+.scorecard th { background:var(--surface-2); color:var(--site-on-background); padding:11px 7px; border-bottom:1px solid var(--border); white-space:nowrap; }
+.scorecard td { padding:13px 7px; border-bottom:1px solid var(--border); font-weight:800; }
+.scorecard th:first-child,.scorecard td:first-child { text-align:left; position:sticky; left:0; background:var(--surface); z-index:1; }
+.scorecard th:first-child { background:var(--surface-2); }
+.scorecard .team-name { white-space:nowrap; }
+.scorecard .grand-total { color:var(--site-primary); font-size:.95rem; background:var(--surface-2); }
+.scorecard-note { color:var(--text-muted); font-size:.75rem; padding:0 18px 14px; }
+@media (max-width:520px) { #app{padding:13px 11px 28px} .hero{padding:21px 18px} h1{font-size:1.85rem} .team-grid{grid-template-columns:1fr} .stats{gap:6px}.stat{padding:10px}.stat strong{font-size:1.15rem} }
+</style>
+</head>
+<body>
+<div id="app"><main class="wrap">
+  <header class="hero"><div class="eyebrow">Nine holes · Five teams · Fifteen players</div><div class="hero-row"><div><h1>Byron Bay<br>Pub Golf</h1><p>Lowest score takes the trophy.</p></div><div class="pill">⛳ LIVE SCORING</div></div></header>
+  <div class="toolbar"><label class="file-label" for="csvFile">＋ Import scores.csv</label><input id="csvFile" type="file" accept=".csv,text/csv"><button id="demoBtn">Load sample data</button><button id="clearBtn">Clear</button></div>
+  <div class="status" style="display:block;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--site-on-background);line-height:1.5"><strong>Using this on iPhone?</strong> Open this HTML file in a browser that supports JavaScript and local file imports. Then tap <strong>Import scores.csv</strong> and select your CSV from On My iPhone.</div>
+  <nav class="page-tabs" aria-label="Main pages"><button class="active" id="scorecardPageTab">Hole scorecard</button><button id="leaderboardPageTab">Leaderboards</button></nav>
+  <section class="page" id="scorecardPage"><section class="panel"><div class="panel-head"><div><small>TEAM SCORES BY HOLE</small><h2>Golf scorecard</h2></div><small>Lowest total wins</small></div><div id="scorecard" class="scorecard-wrap"><div class="empty"><strong>Your scorecard is ready.</strong>Import scores.csv to see each team's score for all nine holes.</div></div><div class="scorecard-note">Each hole shows drink sips + penalty points for that team. A dash means no score has been recorded yet.</div></section></section>
+  <section class="page" id="leaderboardPage" hidden>
+  <div class="status"><span id="fileStatus">No scores loaded yet</span><span id="updated">Offline-ready · Data stays on this device</span></div>
+  <div class="stats"><div class="stat"><strong id="playersStat">—</strong><span>Players</span></div><div class="stat"><strong id="drinksStat">—</strong><span>Drinks recorded</span></div><div class="stat"><strong id="holesStat">—</strong><span>Holes with activity</span></div></div>
+  <div class="tabs"><button class="active" id="individualTab">Individuals</button><button id="teamTab">Teams</button></div>
+  <section class="panel"><div class="panel-head"><div><small id="sectionKicker">PLAYER STANDINGS</small><h2 id="sectionTitle">Individual leaderboard</h2></div><select id="teamFilter" aria-label="Filter by team"><option value="all">All teams</option><option>Red</option><option>Blue</option><option>Green</option><option>Yellow</option><option>Purple</option></select></div><div id="teamFilters" class="filters" hidden></div><div id="leaderboard" class="list"><div class="empty"><strong>Your leaderboard is ready.</strong>Import your existing <code>scores.csv</code> to see the live standings.</div></div></section>
+  </section>
+  <p class="footer">BYRON BAY PUB GOLF · LOCAL OFFLINE LEADERBOARD</p>
+</main></div>
+<script>
+const colors={Red:'#d84b45',Blue:'#4285d4',Green:'#39986b',Yellow:'#e0b52f',Purple:'#9870c7'};
+let records=[],mode='individual',activeTeam='all',fileName='';
+const $=id=>document.getElementById(id);
+function parseCSV(text){const rows=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++;}else if(c==='"')quoted=false;else field+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(field);field='';}else if(c==='\n'){row.push(field.replace(/\r$/,''));rows.push(row);row=[];field='';}else field+=c;}if(field.length||row.length){row.push(field.replace(/\r$/,''));rows.push(row);}return rows;}
+function cleanTeam(v){let s=(v||'').trim();for(const e of ['🔴','🔵','🟢','🟡','🟣'])s=s.replace(e,'');return s.trim();}
+function number(v){const n=Number(String(v??'').trim());return Number.isFinite(n)?n:0;}
+function loadCSV(text,name){const rows=parseCSV(text);if(!rows.length)throw Error('The CSV is empty.');const head=rows[0].map(x=>x.trim().toLowerCase());const col=n=>head.indexOf(n.toLowerCase());const typeI=col('Type'),teamI=col('Team'),playerI=col('Player'),drinkI=col('DrinkCount'),sipI=col('SipCount'),penI=col('PenaltyPoints'),holeI=col('Hole');if([typeI,teamI,playerI,drinkI,sipI,penI,holeI].some(i=>i<0))throw Error('I could not recognise the CSV columns. Please use the scores.csv created by your Pub Golf Shortcut.');records=rows.slice(1).filter(r=>r.some(x=>String(x).trim())).map(r=>({type:(r[typeI]||'').trim().toUpperCase(),team:cleanTeam(r[teamI]),player:(r[playerI]||'').trim(),drinks:number(r[drinkI]),sips:number(r[sipI]),penalty:number(r[penI]),hole:(r[holeI]||'').trim(),penaltyName:(r[col('Penalty')]||'').trim()})).filter(r=>r.player&&r.team);fileName=name||'scores.csv';render();}
+function aggregate(){const map=new Map();for(const r of records){const k=r.player+'|'+r.team;if(!map.has(k))map.set(k,{player:r.player,team:r.team,drinks:0,sips:0,penalty:0,total:0});const a=map.get(k);a.drinks+=r.drinks;a.sips+=r.sips;a.penalty+=r.penalty;a.total+=r.sips+r.penalty;}return [...map.values()].sort((a,b)=>a.total-b.total||a.player.localeCompare(b.player));}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function rankLabel(arr,i){return i>0&&arr[i].total===arr[i-1].total?rankLabel(arr,i-1):i+1;}
+function renderScorecard(){if(!records.length){$('scorecard').innerHTML='<div class="empty"><strong>Your scorecard is ready.</strong>Import scores.csv to see each team\'s score for all nine holes.</div>';return;}const names=['Our House','Art Factory Garden Bar','The Mez','Horizon Bay Hotel','The Northern Hotel','The Balcony Bar','Miss Margarita','Loft Byron Bay','Beach Hotel'];const aliases=[['our house'],['art factory garden bar','art factory'],['the mez','mez'],['horizon bay hotel','horizon bay'],['the northern hotel','northern hotel'],['the balcony bar','balcony bar'],['miss margarita'],['loft byron bay'],['beach hotel']];const teams=['Red','Blue','Green','Yellow','Purple'];const sums={};for(const r of records){const raw=String(r.hole||'').trim().toLowerCase();const numeric=raw.match(/^(?:hole\s*)?(\d+)$/);let h=numeric?Number(numeric[1]):aliases.findIndex(a=>a.includes(raw))+1;if(h<1||h>9||!teams.includes(r.team))continue;const k=r.team+'|'+h;sums[k]=(sums[k]||0)+r.sips+r.penalty;}const totals=teams.map(t=>names.reduce((s,_,i)=>s+(sums[t+'|'+(i+1)]||0),0));$('scorecard').innerHTML='<table class="scorecard"><thead><tr><th>Team</th>'+names.map((n,i)=>`<th>${i+1}<br>${n}</th>`).join('')+'<th>Total</th></tr></thead><tbody>'+teams.map((t,i)=>`<tr><td class="team-name"><span class="team-dot" style="background:${colors[t]}"></span> ${t}</td>`+names.map((_,j)=>`<td>${sums[t+'|'+(j+1)]===undefined?'—':sums[t+'|'+(j+1)]}</td>`).join('')+`<td class="grand-total">${totals[i]||'—'}</td></tr>`).join('')+'</tbody></table>';}
+function render(){renderScorecard();const players=aggregate();const teams=[...new Set(players.map(p=>p.team))];const drinks=records.reduce((s,r)=>s+r.drinks,0);const holes=new Set(records.filter(r=>r.hole).map(r=>r.hole));$('playersStat').textContent=players.length||'0';$('drinksStat').textContent=drinks;$('holesStat').textContent=holes.size+'/9';$('fileStatus').innerHTML=records.length?'<span class="dot"></span>'+esc(fileName)+' · '+records.length+' entries':'No scores loaded yet';$('individualTab').classList.toggle('active',mode==='individual');$('teamTab').classList.toggle('active',mode==='team');$('sectionKicker').textContent=mode==='individual'?'PLAYER STANDINGS':'TEAM STANDINGS';$('sectionTitle').textContent=mode==='individual'?'Individual leaderboard':'Team leaderboard';$('teamFilter').hidden=mode==='team';$('teamFilters').hidden=mode==='individual';if(!records.length){$('leaderboard').innerHTML='<div class="empty"><strong>No scores loaded.</strong>Import your scores.csv to populate the leaderboard.</div>';return;}
+if(mode==='individual'){const shown=players.filter(p=>activeTeam==='all'||p.team===activeTeam);$('leaderboard').innerHTML=shown.length?shown.map((p,i)=>`<div class="entry"><div class="rank ${i<3?'top':''}">${rankLabel(shown,i)}</div><div><div class="name-line"><span class="team-dot" style="background:${colors[p.team]||'#888'}"></span>${esc(p.player)}</div><div class="meta">${esc(p.team)} team · ${p.drinks} drinks · ${p.sips} sips · ${p.penalty} penalty pts</div></div><div><div class="score">${p.total}</div><span class="score-label">TOTAL PTS</span></div></div>`).join(''):'<div class="empty">No players found for this team.</div>';}
+else{const sums=new Map();for(const p of players){if(!sums.has(p.team))sums.set(p.team,{team:p.team,total:0,drinks:0,sips:0,penalty:0,members:[]});const t=sums.get(p.team);t.total+=p.total;t.drinks+=p.drinks;t.sips+=p.sips;t.penalty+=p.penalty;t.members.push(p);}const sorted=[...sums.values()].sort((a,b)=>a.total-b.total||a.team.localeCompare(b.team));$('leaderboard').innerHTML='<div class="team-grid">'+sorted.map((t,i)=>`<article class="team-card"><div class="team-top"><div class="team-title"><span class="team-dot" style="background:${colors[t.team]||'#888'}"></span> ${esc(t.team)}</div><div class="team-score">${t.total}</div></div><div class="team-sub">${t.drinks} drinks · ${t.sips} sips · ${t.penalty} penalty pts</div><div class="team-members">${t.members.sort((a,b)=>a.total-b.total).map(p=>`${esc(p.player)} — ${p.total}`).join('<br>')}</div></article>`).join('')+'</div>';}
+}
+$('csvFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{loadCSV(await f.text(),f.name);$('updated').textContent='Loaded locally · '+new Date().toLocaleTimeString();}catch(err){alert(err.message);}e.target.value='';});
+$('individualTab').onclick=()=>{mode='individual';render();};$('teamTab').onclick=()=>{mode='team';render();};$('teamFilter').onchange=e=>{activeTeam=e.target.value;render();};$('clearBtn').onclick=()=>{records=[];fileName='';render();};
+$('scorecardPageTab').onclick=()=>{ $('scorecardPage').hidden=false;$('leaderboardPage').hidden=true;$('scorecardPageTab').classList.add('active');$('leaderboardPageTab').classList.remove('active');};$('leaderboardPageTab').onclick=()=>{$('scorecardPage').hidden=true;$('leaderboardPage').hidden=false;$('leaderboardPageTab').classList.add('active');$('scorecardPageTab').classList.remove('active');};
+$('demoBtn').onclick=()=>{const demo=[['Sam','Red',0,0,1],['Christian','Red',0,0,2],['Lucia','Red',1,2,0],['Jorge','Blue',0,0,3],['Ana','Green',1,3,0],['Bibbs','Yellow',0,0,0],['Elle','Yellow',0,0,0],['Alessio','Purple',0,0,0],['Ashley','Purple',0,0,0]];records=demo.map(([player,team,drinks,sips,penalty])=>({player,team,drinks,sips,penalty,total:sips+penalty,type:'',hole:'',penaltyName:''}));fileName='Sample data';render();};
+</script>
+</body></html>
